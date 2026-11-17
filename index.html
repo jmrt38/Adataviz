@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap"
+      rel="stylesheet"
+    />
     <title>BiblioScope</title>
   </head>
   <body>
@@ -16,29 +22,245 @@
         />
         <h1>BiblioScope</h1>
       </div>
-      <ul class="menu">
-        <li>Accueil</li>
-        <li>À propos</li>
-      </ul>
     </header>
     <main>
       <section class="titre-image">
-        <img id="img-presentation" src="#" alt="" />
-        <h2>Les livres les plus populaires des bibliothèques parisiennes</h2>
-        <p>
-          Découvrez le classement des 1 000 titres les plus réservés dans les
-          bibliothèques de prêt de Paris.
-        </p>
-      </section>
-      <section class="filtres">
-        <div id="barre-recherche"></div>
-        <div class="conteneur-tri">
-          <div class="filtre-tri" id="type-document"></div>
-          <div class="filtre-tri" id="trier-par"></div>
+        <img
+          id="img-presentation"
+          src="./images/Paris pastel avec Tour Eiffel et pont.png"
+          alt="Image représentant un dessin de Paris avec la tour Eiffel"
+        />
+        <div class="titre-description">
+          <h2>Les Oeuvres les plus populaires des bibliothèques parisiennes</h2>
+          <p>
+            Découvrez le classement des 1 000 titres les plus réservés dans les
+            bibliothèques de prêt de Paris.
+          </p>
         </div>
       </section>
+      <form class="filtres">
+        <!-- Barre de recherche -->
+        ,
+        <input
+          type="search"
+          id="recherche"
+          placeholder="Rechercher un livre ou un auteur..."
+        />
+
+        <!-- Filtre par type de document -->
+        <select id="type-document">
+          <option value="">Types de documents</option>
+          <option value="roman">Roman</option>
+          <option value="bande-dessinee">Bande dessinée</option>
+          <option value="manga">Manga</option>
+          <option value="jeunesse">Jeunesse</option>
+        </select>
+
+        <!-- Trier par -->
+        <select id="tri">
+          <option value="">Trier par</option>
+          <option value="reservations-croissant">Moins réservés</option>
+          <option value="reservations-decroissant">Plus réservés</option>
+          <option value="titre-croissant">Titre (A-Z)</option>
+          <option value="titre-decroissant">Titre (Z-A)</option>
+        </select>
+      </form>
       <section class="conteneur-cartes">
-        <div class="carte"></div>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
+        <article class="carte">
+          <img
+            id="image-carte"
+            src="./images/exemple.avif"
+            alt="Couverture d'un livre"
+          />
+          <div class="présentation-titre">
+            <h3>Le Grand Monde</h3>
+            <p>Pierre LEMAITRE</p>
+            <p>Livre</p>
+            <p>1 058 réservations</p>
+          </div>
+        </article>
       </section>
     </main>
     <footer>

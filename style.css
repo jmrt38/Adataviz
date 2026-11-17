@@ -8,7 +8,14 @@ body {
   min-height: 100vh;
   font-family: sans-serif;
   background-color: white;
-  color: #102d4f;
+  color: #142D50;
+  margin: 5px;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+}
+
+h1, h2 {
+    font-family: "Russo One", sans-serif;
 }
 
 header {
@@ -17,9 +24,9 @@ header {
     border-radius: 20px 20px 0 0;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-
+    padding-right: 1rem;
 }
 
 .logo {
@@ -32,14 +39,203 @@ header {
 
 #img-logo {
     max-width: 5rem;
+    filter: brightness(0) invert(1);
+}
+
+main {
+    border : solid 2px #142D50;
+}
+
+.titre-image {
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+#img-presentation {
+    width: 100%;
+    max-width: 100%;
+    height: 15rem;
+    object-fit: cover;
+}
+
+.titre-description {
+    position: absolute;
+    z-index: 1;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 75%;
+}
+
+.filtres {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+}
+
+.filtres input,
+.filtres select {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    background-color: white;
+}
+
+.filtres input {
+    flex: 1;
+}
+
+.filtres input:focus,
+.filtres select:focus {
+    outline: none;
+    border: 1px solid #142D50;
+    box-shadow: 0 0 0 3px rgba(20, 45, 80, 0.15);
+    transition: all 0.2s ease;
+}
+
+.filtres select {
+    padding: 12px 35px 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    background-color: white;
+    color: #142D50;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filtres select option {
+    background-color: white;
+    color: #142D50;
+    padding: 10px;
+}
+
+.filtres select option:hover {
+    background-color: #142D50;
+    color: white;
+}
+
+.carte {
+    margin: 10px 4px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(20, 45, 80, 0.15);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+}
+
+#image-carte {
+    max-width: 5rem;
+}
+
+.carte {
+    transition: all 0.2s ease;
+}
+
+.carte:hover {
+    border: 1px solid #142D50;
+    box-shadow: 0 0 0 3px rgba(20, 45, 80, 0.15);
+    transform: translateY(-3px);
+    cursor: pointer;
+}
+
+.présentation-titre {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+footer {
+    background-color: #142D50;
+    color: white;
+    border-radius: 0 0 20px 20px;
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
+    gap: 1.5rem;
+}
+
+.separateur {
+    width: 1px;
+    height: 25px;
+    background-color: white;
+}
+
+/* ===================================================
+=================================================================
+GRANDS ECRANS
+======================================================
+=================================================================*/
+
+@media screen and (min-width: 486px) {
+    .titre-description {
+    position: absolute;
+    z-index: 1;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 65%;
+}
+}
+
+@media screen and (min-width: 768px) {
+
+#img-presentation {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.conteneur-cartes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#image-carte {
+    max-width: 10rem;
+}
 
 }
 
-.menu {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    list-style: none;
+@media screen and (min-width: 960px) {
+    .titre-description {
+    width: 50%;
+}
+}
+
+@media screen and (min-width: 1240px) {
+    .titre-description {
+    width: 40%;
+    font-size: 1.5rem;
+    padding-bottom: 3rem;
+    padding-left: 2rem;
+}
+}
+
+@media screen and (min-width: 1630px) {
+    .conteneur-cartes {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .carte {
+        margin: 0;
+    }
 }
