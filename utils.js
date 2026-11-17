@@ -1,3 +1,34 @@
+// Fonctions
+
+export const formaterDonnee = (item) => {
+
+  return {
+    rang: item.rang,
+    type: item.type_de_document ?? "",
+    reservations: item.reservations,
+    titre: item.titre,
+    auteur: item.auteur ?? "",
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Exercice 1
 
 // 1 - console.log("Début")
