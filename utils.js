@@ -76,7 +76,7 @@ attendre(1000)
 
 // Exercice 4
 
-const simulerRequete = () => {
+/* const simulerRequete = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const n = Math.random()
@@ -93,4 +93,62 @@ const simulerRequete = () => {
 
 simulerRequete()
   .then(donnee => console.log(donnee))
-  .catch(erreur => console.error(erreur.message))
+  .catch(erreur => console.error(erreur.message)) */
+
+
+  // Async / Await
+
+  // Exercice 1
+  /* const attendre = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve("Terminé"), ms)
+  })
+}
+
+attendre(1000)
+  .then(valeur => console.log(valeur)) */
+
+
+
+/* const charger = async () => {
+  const valeur = await attendre(1000)
+  console.log(valeur) // Terminé
+}
+
+charger() */
+
+
+// Exercice 2
+
+/* const simulerRequete = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const n = Math.random()
+      if (n < 0.1) {
+        reject(new Error("Serveur injoignable"))
+      } else if (n < 0.2) {
+        reject(new Error("Délai dépassé"))
+      } else {
+        resolve("Donnée reçue")
+      }
+    }, 2000)
+  })
+}
+
+simulerRequete()
+  .then(donnee => console.log(donnee))
+  .catch(erreur => console.error(erreur.message)) */
+
+
+/* const EnvoyerRequete = async () => {
+
+  try {
+    const valeur = await simulerRequete()
+    console.log(valeur)
+  }
+  catch (err) {
+    console.log(err.message)
+  }
+}
+
+EnvoyerRequete() */

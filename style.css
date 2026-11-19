@@ -6,11 +6,10 @@
 
 body {
   min-height: 100vh;
-  font-family: sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: white;
   color: #142D50;
   margin: 5px;
-  font-family: "Inter", sans-serif;
   font-size: 16px;
 }
 
@@ -23,7 +22,6 @@ header {
     color: white;
     border-radius: 20px 20px 0 0;
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     padding-right: 1rem;
@@ -31,7 +29,6 @@ header {
 
 .logo {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     font-size: 0.8rem;
@@ -53,9 +50,9 @@ main {
 
 #img-presentation {
     width: 100%;
-    max-width: 100%;
     height: 15rem;
     object-fit: cover;
+    display: block;
 }
 
 .titre-description {
@@ -69,7 +66,7 @@ main {
 .filtres {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     gap: 10px;
     align-items: center;
     padding-left: 0.2rem;
@@ -84,6 +81,7 @@ main {
     font-family: "Inter", sans-serif;
     font-size: 14px;
     background-color: white;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .filtres input {
@@ -95,16 +93,10 @@ main {
     outline: none;
     border: 1px solid #142D50;
     box-shadow: 0 0 0 3px rgba(20, 45, 80, 0.15);
-    transition: all 0.2s ease;
 }
 
 .filtres select {
     padding: 12px 35px 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    background-color: white;
     color: #142D50;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -121,24 +113,45 @@ main {
     color: white;
 }
 
+.conteneur-cartes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 1rem;
+    justify-items: center;
+    align-items: center;
+}
+
 .carte {
+    position: relative;
+    width: 20rem;
+    min-height: 15rem;
     margin: 10px 4px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(20, 45, 80, 0.15);
     padding: 0.5rem;
     display: flex;
-    flex-direction: row;
     align-items: center;
     gap: 2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-#image-carte {
+.rang {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    border: solid 2px black;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-carte {
     max-width: 5rem;
-}
-
-.carte {
-    transition: all 0.2s ease;
 }
 
 .carte:hover {
@@ -182,11 +195,7 @@ GRANDS ECRANS
 
 @media screen and (min-width: 486px) {
     .titre-description {
-    position: absolute;
-    z-index: 1;
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 65%;
+        width: 65%;
 }
 }
 
@@ -206,8 +215,8 @@ GRANDS ECRANS
     justify-content: space-evenly;
 }
 
-#image-carte {
-    max-width: 10rem;
+.image-carte {
+    max-width: 6rem;
 }
 
 }
@@ -216,6 +225,11 @@ GRANDS ECRANS
     .titre-description {
     width: 50%;
 }
+
+.image-carte {
+    max-width: 8rem;
+}
+
 }
 
 @media screen and (min-width: 1240px) {
