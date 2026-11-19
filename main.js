@@ -2,6 +2,9 @@ import { formaterDonnee } from "./utils.js";
 
 const url = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/les-1000-titres-les-plus-reserves-dans-les-bibliotheques-de-pret/records?order_by=reservations%20DESC&limit=100";
 const conteneurCartes = document.querySelector(".conteneur-cartes");
+const selectType = document.querySelector("#type-document");
+const inputRecherche = document.querySelector("#recherche");
+const selectTri = document.querySelector("#tri");
 
 // 1. Déclaration des fonctions
 const recupererTitres = async () => {
@@ -16,6 +19,30 @@ const recupererTitres = async () => {
 
 const tableauExploitable = (liste) => {
     return liste.results.map(element => formaterDonnee(element));
+};
+
+const appliquerFiltres = () => {
+    const typeSelectionne = selectType.value;
+    const recherche = inputRecherche.value.toLowerCase();
+
+    const titresFiltres = titresFormates.filter((element) => {
+        const titre = element.titre.toLowerCase();
+        const auteur = element.auteur.toLowerCase();
+
+        const correspondRecherche =
+            recherche === "" ||
+            titre.includes(recherche) ||
+            auteur.includes(recherche);
+
+        const correspondType =
+            typeSelectionne === "" ||
+            element.type === typeSelectionne ||
+            (typeSelectionne === "__sans_type__" && element.type === "");
+
+        return correspondRecherche && correspondType;
+    });
+
+    afficherTitres(titresFiltres);
 };
 
 const determinerImage = (type, article) => {
@@ -92,17 +119,33 @@ const creerCarte = (element) => {
     conteneurCartes.appendChild(article);
 };
 
+const afficherTitres = (liste) => {
+    conteneurCartes.innerHTML = "";
+    liste.forEach(creerCarte);
+};
+
 // 2. Exécution principale
+
+let titresFormates = [];
+
 try {
     if (!conteneurCartes) {
         throw new Error("Élément .conteneur-cartes introuvable dans le DOM");
     }
+    if (!selectType) {
+    throw new Error("Élément #type-document introuvable dans le DOM");
+    }
+    if (!inputRecherche) {
+    throw new Error("Élément #recherche introuvable dans le DOM");
+    }
 
     const titres = await recupererTitres();
-    const titresFormates = tableauExploitable(titres);
+    titresFormates = tableauExploitable(titres);
 
-    conteneurCartes.innerHTML = "";
-    titresFormates.forEach(creerCarte);
+    selectType.addEventListener("change", appliquerFiltres);
+    inputRecherche.addEventListener("input", appliquerFiltres);
+
+    afficherTitres(titresFormates)
 } catch (erreur) {
     console.error("Oups, un problème est survenu :", erreur.message);
 }
