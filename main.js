@@ -1,24 +1,37 @@
 import { formaterDonnee } from "./utils.js";
 
-const url = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/les-1000-titres-les-plus-reserves-dans-les-bibliotheques-de-pret/records?order_by=reservations%20DESC&limit=100";
+const url = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/les-1000-titres-les-plus-reserves-dans-les-bibliotheques-de-pret/records";
 const conteneurCartes = document.querySelector(".conteneur-cartes");
 const selectType = document.querySelector("#type-document");
 const inputRecherche = document.querySelector("#recherche");
 const selectTri = document.querySelector("#tri");
 
+const ELEMENTS_PAR_PAGE = 20;
+let pageActuelle = 1;
+let derniersTitresAffiches = [];
+
 // 1. Déclaration des fonctions
 const recupererTitres = async () => {
-    const reponse = await fetch(url);
+    const tousLesTitres = [];
 
-    if (!reponse.ok) {
-        throw new Error(`Erreur HTTP ! Statut : ${reponse.status}`);
+    for (let offset = 0; offset < 1000; offset += 100) {
+        const urlComplete = `${url}?order_by=reservations%20DESC&limit=100&offset=${offset}`;
+
+        const toutesLesReponses = await fetch(urlComplete);
+
+        if (!toutesLesReponses.ok) {
+            throw new Error(`Erreur HTTP ! Statut : ${toutesLesReponses.status}`);
+        }
+
+        const donnees = await toutesLesReponses.json();
+        tousLesTitres.push(...donnees.results);
     }
-
-    return await reponse.json();
+    tousLesTitres.sort((a, b) => a.rang - b.rang);
+    return tousLesTitres;
 };
 
 const tableauExploitable = (liste) => {
-    return liste.results.map(element => formaterDonnee(element));
+    return liste.map(element => formaterDonnee(element));
 };
 
 const appliquerFiltres = () => {
@@ -42,7 +55,24 @@ const appliquerFiltres = () => {
         return correspondRecherche && correspondType;
     });
 
-    afficherTitres(titresFiltres);
+    const triSelectionne = selectTri.value;
+    const titresTries = [...titresFiltres];
+
+    if (triSelectionne === "reservations-croissant") {
+        titresTries.sort((a, b) => a.reservations - b.reservations);
+    }
+    else if (triSelectionne === "reservations-decroissant") {
+        titresTries.sort((a, b) => b.reservations - a.reservations);
+    }
+    else if (triSelectionne === "titre-croissant") {
+        titresTries.sort((a, b) => a.titre.localeCompare(b.titre, "fr"));
+    }
+    else if (triSelectionne === "titre-decroissant") {
+        titresTries.sort((a, b) => b.titre.localeCompare(a.titre, "fr"));
+    }
+
+    pageActuelle = 1;
+    afficherTitres(titresTries);
 };
 
 const determinerImage = (type, article) => {
@@ -77,6 +107,16 @@ const determinerImage = (type, article) => {
     }
 }
 
+const formaterAuteur = (auteur) => {
+    const parties = auteur.split(", ");
+
+    if (parties.length !== 2) {
+        return auteur;
+    }
+
+    return `${parties[1]} ${parties[0]}`;
+};
+
 const creerCarte = (element) => {
     const article = document.createElement("article");
     article.classList.add("carte");
@@ -98,7 +138,7 @@ const creerCarte = (element) => {
 
     if (element.auteur) {
         const auteurArticle = document.createElement("p");
-        auteurArticle.textContent = element.auteur;
+        auteurArticle.textContent = formaterAuteur(element.auteur);
         bioArticle.appendChild(auteurArticle);
     }
 
@@ -119,9 +159,124 @@ const creerCarte = (element) => {
     conteneurCartes.appendChild(article);
 };
 
+const paginerTitres = (liste, page = 1) => {
+    const indexDebut = (page - 1) * ELEMENTS_PAR_PAGE;
+    const indexFin = indexDebut + ELEMENTS_PAR_PAGE;
+    return liste.slice(indexDebut, indexFin);
+};
+
+const afficherPagination = (totalElements) => {
+    let conteneurPagination = document.querySelector(".pagination");
+
+    if (!conteneurPagination) {
+        conteneurPagination = document.createElement("nav");
+        conteneurPagination.classList.add("pagination");
+        conteneurCartes.insertAdjacentElement("afterend", conteneurPagination);
+    }
+
+    conteneurPagination.innerHTML = "";
+
+    const nombrePages = Math.ceil(totalElements / ELEMENTS_PAR_PAGE);
+    if (nombrePages <= 1) {
+        return;
+    }
+
+    const ajouterBoutonPage = (numeroPage) => {
+        const boutonPage = document.createElement("button");
+        boutonPage.type = "button";
+        boutonPage.classList.add("pagination-btn", "pagination-numero");
+        boutonPage.textContent = numeroPage;
+
+        if (numeroPage === pageActuelle) {
+            boutonPage.classList.add("active");
+            boutonPage.setAttribute("aria-current", "page");
+        }
+
+        boutonPage.addEventListener("click", () => {
+            pageActuelle = numeroPage;
+            afficherTitres(derniersTitresAffiches);
+            conteneurCartes.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        conteneurPagination.appendChild(boutonPage);
+    };
+
+    const ajouterEllipses = () => {
+        const points = document.createElement("span");
+        points.classList.add("pagination-ellipsis");
+        points.textContent = "...";
+        points.setAttribute("aria-hidden", "true");
+        conteneurPagination.appendChild(points);
+    };
+
+    const boutonPrecedent = document.createElement("button");
+    boutonPrecedent.type = "button";
+    boutonPrecedent.classList.add("pagination-btn", "pagination-precedent");
+    boutonPrecedent.textContent = "Précédent";
+    boutonPrecedent.disabled = pageActuelle === 1;
+    boutonPrecedent.addEventListener("click", () => {
+        if (pageActuelle > 1) {
+            pageActuelle -= 1;
+            afficherTitres(derniersTitresAffiches);
+            conteneurCartes.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    });
+    conteneurPagination.appendChild(boutonPrecedent);
+
+    const delta = 2; // Nombre de pages affichées de chaque côté de la page actuelle
+    const debutFenetre = Math.max(2, pageActuelle - delta);
+    const finFenetre = Math.min(nombrePages - 1, pageActuelle + delta);
+
+    // Toujours afficher la première page
+    ajouterBoutonPage(1);
+
+    // Ellipses avant la fenêtre si nécessaire
+    if (debutFenetre > 2) {
+        ajouterEllipses();
+    }
+
+    // Pages autour de la page actuelle
+    for (let numeroPage = debutFenetre; numeroPage <= finFenetre; numeroPage++) {
+        ajouterBoutonPage(numeroPage);
+    }
+
+    // Ellipses après la fenêtre si nécessaire
+    if (finFenetre < nombrePages - 1) {
+        ajouterEllipses();
+    }
+
+    // Toujours afficher la dernière page (si plus d'une page)
+    if (nombrePages > 1) {
+        ajouterBoutonPage(nombrePages);
+    }
+
+    const boutonSuivant = document.createElement("button");
+    boutonSuivant.type = "button";
+    boutonSuivant.classList.add("pagination-btn", "pagination-suivant");
+    boutonSuivant.textContent = "Suivant";
+    boutonSuivant.disabled = pageActuelle === nombrePages;
+    boutonSuivant.addEventListener("click", () => {
+        if (pageActuelle < nombrePages) {
+            pageActuelle += 1;
+            afficherTitres(derniersTitresAffiches);
+            conteneurCartes.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    });
+    conteneurPagination.appendChild(boutonSuivant);
+};
+
 const afficherTitres = (liste) => {
+    derniersTitresAffiches = liste;
+    const nombrePages = Math.max(1, Math.ceil(liste.length / ELEMENTS_PAR_PAGE));
+
+    if (pageActuelle > nombrePages) {
+        pageActuelle = nombrePages;
+    }
+
+    const elementsPage = paginerTitres(liste, pageActuelle);
     conteneurCartes.innerHTML = "";
-    liste.forEach(creerCarte);
+    elementsPage.forEach(creerCarte);
+    afficherPagination(liste.length);
 };
 
 // 2. Exécution principale
@@ -144,6 +299,7 @@ try {
 
     selectType.addEventListener("change", appliquerFiltres);
     inputRecherche.addEventListener("input", appliquerFiltres);
+    selectTri.addEventListener("change", appliquerFiltres);
 
     afficherTitres(titresFormates)
 } catch (erreur) {
