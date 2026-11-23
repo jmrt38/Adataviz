@@ -1,16 +1,28 @@
+// ==========================================
+// 1. IMPORTS ET CONFIGURATION
+// ==========================================
+
 import { formaterDonnee } from "./utils.js";
 
-const url = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/les-1000-titres-les-plus-reserves-dans-les-bibliotheques-de-pret/records";
+const url =
+    "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/les-1000-titres-les-plus-reserves-dans-les-bibliotheques-de-pret/records";
+
 const conteneurCartes = document.querySelector(".conteneur-cartes");
 const selectType = document.querySelector("#type-document");
 const inputRecherche = document.querySelector("#recherche");
 const selectTri = document.querySelector("#tri");
 
 const ELEMENTS_PAR_PAGE = 20;
+
 let pageActuelle = 1;
 let derniersTitresAffiches = [];
+let titresFormates = [];
 
-// 1. Déclaration des fonctions
+
+// ==========================================
+// 2. RÉCUPÉRATION ET PRÉPARATION DES DONNÉES
+// ==========================================
+
 const recupererTitres = async () => {
     const tousLesTitres = [];
 
@@ -26,13 +38,20 @@ const recupererTitres = async () => {
         const donnees = await toutesLesReponses.json();
         tousLesTitres.push(...donnees.results);
     }
+
     tousLesTitres.sort((a, b) => a.rang - b.rang);
+
     return tousLesTitres;
 };
 
 const tableauExploitable = (liste) => {
     return liste.map(element => formaterDonnee(element));
 };
+
+
+// ==========================================
+// 3. FILTRES ET TRI
+// ==========================================
 
 const appliquerFiltres = () => {
     const typeSelectionne = selectType.value;
@@ -75,37 +94,42 @@ const appliquerFiltres = () => {
     afficherTitres(titresTries);
 };
 
+
+// ==========================================
+// 4. CRÉATION DES CARTES
+// ==========================================
+
 const determinerImage = (type, article) => {
 
     if (type.toLowerCase().includes("dvd")) {
-        const imgDVD = document.createElement("img")
-        imgDVD.classList.add("image-carte")
-        imgDVD.src = "./images/dvd.png"
-        imgDVD.alt = "Logo d'un document de type DVD"
-        article.appendChild(imgDVD)
+        const imgDVD = document.createElement("img");
+        imgDVD.classList.add("image-carte");
+        imgDVD.src = "./images/dvd.png";
+        imgDVD.alt = "Logo d'un document de type DVD";
+        article.appendChild(imgDVD);
 
     } else if (type.toLowerCase().includes("bande dessinée")) {
-        const imgBD = document.createElement("img")
-        imgBD.classList.add("image-carte")
-        imgBD.src = "./images/BD.png"
-        imgBD.alt = "Logo d'un document de type bande dessinée"
-        article.appendChild(imgBD)
+        const imgBD = document.createElement("img");
+        imgBD.classList.add("image-carte");
+        imgBD.src = "./images/BD.png";
+        imgBD.alt = "Logo d'un document de type bande dessinée";
+        article.appendChild(imgBD);
 
     } else if (type.toLowerCase().includes("nouveauté")) {
-        const imgNouveaute = document.createElement("img")
-        imgNouveaute.classList.add("image-carte")    
-        imgNouveaute.src = "./images/nouveauté.png"
-        imgNouveaute.alt = "Logo d'une forme avec NEW inscrit à l'intérieur"
-        article.appendChild(imgNouveaute)
-    
+        const imgNouveaute = document.createElement("img");
+        imgNouveaute.classList.add("image-carte");
+        imgNouveaute.src = "./images/nouveauté.png";
+        imgNouveaute.alt = "Logo d'une forme avec NEW inscrit à l'intérieur";
+        article.appendChild(imgNouveaute);
+
     } else {
-        const imgLivre = document.createElement("img")
-        imgLivre.classList.add("image-carte")
-        imgLivre.src = "./images/livre.png"
-        imgLivre.alt = "Logo d'un document de type livre"
-        article.appendChild(imgLivre)
+        const imgLivre = document.createElement("img");
+        imgLivre.classList.add("image-carte");
+        imgLivre.src = "./images/livre.png";
+        imgLivre.alt = "Logo d'un document de type livre";
+        article.appendChild(imgLivre);
     }
-}
+};
 
 const formaterAuteur = (auteur) => {
     const parties = auteur.split(", ");
@@ -121,8 +145,8 @@ const creerCarte = (element) => {
     const article = document.createElement("article");
     article.classList.add("carte");
 
-    const bioArticle = document.createElement("div")
-    bioArticle.classList.add("présentation-titre")
+    const bioArticle = document.createElement("div");
+    bioArticle.classList.add("présentation-titre");
 
     const type = element.type;
     determinerImage(type, article);
@@ -130,7 +154,7 @@ const creerCarte = (element) => {
     const rangArticle = document.createElement("span");
     rangArticle.classList.add("rang");
     rangArticle.textContent = element.rang;
-    article.appendChild(rangArticle)
+    article.appendChild(rangArticle);
 
     const titreArticle = document.createElement("h3");
     titreArticle.textContent = element.titre;
@@ -155,13 +179,19 @@ const creerCarte = (element) => {
         bioArticle.appendChild(reservationsArticle);
     }
 
-    article.appendChild(bioArticle)
+    article.appendChild(bioArticle);
     conteneurCartes.appendChild(article);
 };
+
+
+// ==========================================
+// 5. PAGINATION
+// ==========================================
 
 const paginerTitres = (liste, page = 1) => {
     const indexDebut = (page - 1) * ELEMENTS_PAR_PAGE;
     const indexFin = indexDebut + ELEMENTS_PAR_PAGE;
+
     return liste.slice(indexDebut, indexFin);
 };
 
@@ -177,6 +207,7 @@ const afficherPagination = (totalElements) => {
     conteneurPagination.innerHTML = "";
 
     const nombrePages = Math.ceil(totalElements / ELEMENTS_PAR_PAGE);
+
     if (nombrePages <= 1) {
         return;
     }
@@ -214,6 +245,7 @@ const afficherPagination = (totalElements) => {
     boutonPrecedent.classList.add("pagination-btn", "pagination-precedent");
     boutonPrecedent.textContent = "Précédent";
     boutonPrecedent.disabled = pageActuelle === 1;
+
     boutonPrecedent.addEventListener("click", () => {
         if (pageActuelle > 1) {
             pageActuelle -= 1;
@@ -221,6 +253,7 @@ const afficherPagination = (totalElements) => {
             conteneurCartes.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     });
+
     conteneurPagination.appendChild(boutonPrecedent);
 
     const delta = 2; // Nombre de pages affichées de chaque côté de la page actuelle
@@ -255,6 +288,7 @@ const afficherPagination = (totalElements) => {
     boutonSuivant.classList.add("pagination-btn", "pagination-suivant");
     boutonSuivant.textContent = "Suivant";
     boutonSuivant.disabled = pageActuelle === nombrePages;
+
     boutonSuivant.addEventListener("click", () => {
         if (pageActuelle < nombrePages) {
             pageActuelle += 1;
@@ -262,11 +296,18 @@ const afficherPagination = (totalElements) => {
             conteneurCartes.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     });
+
     conteneurPagination.appendChild(boutonSuivant);
 };
 
+
+// ==========================================
+// 6. AFFICHAGE DES TITRES
+// ==========================================
+
 const afficherTitres = (liste) => {
     derniersTitresAffiches = liste;
+
     const nombrePages = Math.max(1, Math.ceil(liste.length / ELEMENTS_PAR_PAGE));
 
     if (pageActuelle > nombrePages) {
@@ -274,24 +315,29 @@ const afficherTitres = (liste) => {
     }
 
     const elementsPage = paginerTitres(liste, pageActuelle);
+
     conteneurCartes.innerHTML = "";
     elementsPage.forEach(creerCarte);
+
     afficherPagination(liste.length);
 };
 
-// 2. Exécution principale
 
-let titresFormates = [];
+// ==========================================
+// 7. EXÉCUTION PRINCIPALE
+// ==========================================
 
 try {
     if (!conteneurCartes) {
         throw new Error("Élément .conteneur-cartes introuvable dans le DOM");
     }
+
     if (!selectType) {
-    throw new Error("Élément #type-document introuvable dans le DOM");
+        throw new Error("Élément #type-document introuvable dans le DOM");
     }
+
     if (!inputRecherche) {
-    throw new Error("Élément #recherche introuvable dans le DOM");
+        throw new Error("Élément #recherche introuvable dans le DOM");
     }
 
     const titres = await recupererTitres();
@@ -301,7 +347,8 @@ try {
     inputRecherche.addEventListener("input", appliquerFiltres);
     selectTri.addEventListener("change", appliquerFiltres);
 
-    afficherTitres(titresFormates)
+    afficherTitres(titresFormates);
+
 } catch (erreur) {
     console.error("Oups, un problème est survenu :", erreur.message);
 }
