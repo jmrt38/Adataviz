@@ -85,6 +85,9 @@ git clone URL_DU_DEPOT
 
 > Le projet utilise des modules JavaScript ES6 et des requêtes Fetch. Il doit donc être lancé depuis un serveur local plutôt que directement en ouvrant le fichier HTML.
 
+## Navigation en ligne
+
+copier/coller ce lien dans la barre d'adresse de votre navigateur ou cliquez directement dessus : adaquiz-iu59.netlify.app
 ## 📁 Structure du projet
 
 ```text
